@@ -1,0 +1,33 @@
+записаться на тату к мастеру в студию
+посмотреть все тату по специализации артиста
+посмотреть самого мастера
+посмотреть список работ мастера
+посмотреть студию
+посмотреть список мастеров в студии
+посмотреть список мастеров в студии по специализации
+посмотреть список всех мастеров по специализации
+посмотреть всех мастеров по специализации с указанием их студии
+посмотреть список татух с фильтрацией по цене
+посмотреть список татух по цене и по специализации мастера
+Получить список клиентов, которые имеют более одной активной записи на татуировку.
+SELECT Client.id, Client.first_name, Client.last_name, COUNT(Appointment.id) AS active_appointments
+FROM Client
+INNER JOIN Appointment ON Client.id = Appointment.client_id
+WHERE Appointment.status = 'активная'
+GROUP BY Client.id
+HAVING COUNT(Appointment.id) > 1;
+
+Получить среднюю стоимость татуировок для каждой специализации мастеров.
+SELECT Artist.specialization, AVG(Tattoo.price) AS average_price
+FROM Artist
+INNER JOIN TattooArtistLink ON Artist.id = TattooArtistLink.artist_id
+INNER JOIN Tattoo ON Tattoo.id = TattooArtistLink.tattoo_id
+GROUP BY Artist.specialization;
+
+Получить список мастеров, у которых есть записи на татуировку в определенной студии.
+SELECT Artist.id, Artist.first_name, Artist.last_name
+FROM Artist
+INNER JOIN TattooArtistLink ON Artist.id = TattooArtistLink.artist_id
+INNER JOIN Appointment ON Appointment.tattoo_id = TattooArtistLink.tattoo_id
+INNER JOIN Studio ON Studio.id = Appointment.studio_id
+WHERE Studio.name = 'Название студии';
