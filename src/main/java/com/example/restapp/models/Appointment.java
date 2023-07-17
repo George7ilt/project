@@ -7,7 +7,7 @@ import lombok.Setter;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "appointments")
+@Table(name = "appointment")
 @Getter
 @Setter
 public class Appointment {
@@ -15,13 +15,21 @@ public class Appointment {
     @Id
     @Column
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private long id;
 
     @Column(name = "appointment_date_time")
     @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime dateTime;
 
-    @Column
-    private String status;
+    @OneToOne
+    @JoinColumn(name = "client_id")
+    private Client client;
+
+    @OneToOne
+    @JoinColumn(name = "master_id")
+    private Master master;
+
+    @Enumerated(value = EnumType.STRING)
+    private Status status;
 
 }

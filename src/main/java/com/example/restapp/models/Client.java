@@ -5,10 +5,12 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.Cascade;
 
+import java.util.List;
 import java.util.Objects;
 
-@Table(name = "clients")
+@Table(name = "client")
 @Entity
 @Getter
 @Setter
@@ -18,27 +20,34 @@ public class Client {
     @Id
     @Column
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private long id;
 
-    @Column(name = "firstname", nullable = false)
-    private String firstName;
-
-    @Column(name = "lastname", nullable = false)
-    private String lastName;
+    @Column(name = "name", nullable = false)
+    private String name;
 
     @Column(name = "contact_number")
     private String contactNumber;
+
+    @ManyToMany
+    @JoinTable(name = "client_tatto",
+            joinColumns = @JoinColumn(name = "client_id"),
+            inverseJoinColumns = @JoinColumn(name = "tattoo_id"))
+    @Cascade(value = {org.hibernate.annotations.CascadeType.MERGE,
+            org.hibernate.annotations.CascadeType.PERSIST})
+    private List<Tattoo> tattoos;
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Client client = (Client) o;
-        return Objects.equals(id, client.id) && Objects.equals(firstName, client.firstName) && Objects.equals(lastName, client.lastName) && Objects.equals(contactNumber, client.contactNumber);
+        return id == client.id && Objects.equals(name, client.name) && Objects.equals(contactNumber, client.contactNumber);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, firstName, lastName, contactNumber);
+        return Objects.hash(id, name, contactNumber);
     }
+
+
 }
