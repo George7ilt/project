@@ -36,6 +36,11 @@ public class Client {
             org.hibernate.annotations.CascadeType.PERSIST})
     private List<Tattoo> tattoos;
 
+    @ManyToMany(mappedBy = "clients")
+    @Cascade(value = {org.hibernate.annotations.CascadeType.PERSIST, org.hibernate.annotations.CascadeType.MERGE})
+    
+    private List<Studio> studios;
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
