@@ -2,7 +2,7 @@ package com.example.restapp.services;
 
 import com.example.restapp.DTO.AppointmentDTO;
 import com.example.restapp.DTO.utils.Converter;
-import com.example.restapp.models.Appointment;
+import com.example.restapp.models.relations.Appointment;
 import com.example.restapp.models.Status;
 import com.example.restapp.repo.AppointmentRepo;
 import lombok.RequiredArgsConstructor;

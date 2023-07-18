@@ -18,9 +18,4 @@ public class AppointmentController {
     public ResponseEntity<?> setAppointment(@RequestBody @Valid AppointmentDTO appointmentDTO) {
         return ResponseEntity.ok(appointmentService.setAppointment(appointmentDTO));
     }
-
-    @GetMapping("/{clientId}")
-    public ResponseEntity<?> getAppointmentsByClientId(@PathVariable long clientId) {
-        return ResponseEntity.ok(appointmentService.findAppointmentsByClientId(clientId));
-    }
 }

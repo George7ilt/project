@@ -8,38 +8,33 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface TattooRepo extends JpaRepository<Tattoo, Long> {
-    @Query(nativeQuery = true, value = """
-            SELECT master.specialization, AVG(tattoo.price) AS average_price
-            FROM master
-            INNER JOIN master_tattoo ON Master.id = master_tattoo.master_id
-            INNER JOIN Tattoo ON Tattoo.id = master_tattoo.tattoo_id
-            GROUP BY Master.specialization
+    @Query(value = """
+            SELECT m.specialization, AVG(t.price) AS average_price
+            FROM Master m
+            INNER JOIN MastersTattoos mt ON m.id = mt.master.id
+            INNER JOIN Tattoo t ON t.id = mt.tattoo.id
+            GROUP BY m.specialization
             """
     )
-    List<Object[]>  getAveragePriceOnSpecializations();
+    List<Object[]> getAveragePriceOnSpecializations();
 
-    @Query(value = "SELECT t.* FROM tattoo t " +
-            "INNER JOIN master_tattoo mt ON t.id = mt.tattoo_id " +
-            "INNER JOIN master m ON mt.master_id = m.id " +
+    @Query(value = "SELECT distinct t FROM Tattoo t " +
+            "INNER JOIN MastersTattoos mt ON t.id = mt.tattoo.id " +
+            "INNER JOIN Master m ON mt.master.id = m.id " +
             "WHERE m.specialization = :specialization " +
             "AND t.price <= :maxPrice " +
-            "AND t.price >= :minPrice", nativeQuery = true)
+            "AND t.price >= :minPrice")
     List<Tattoo> findTattoosByPriceAndSpecialization(@Param("specialization") String specialization,
                                                      @Param("minPrice") double minPrice,
                                                      @Param("maxPrice") double maxPrice);
 
 
-
-
-
-//    Получить все татуировки, которые стоят меньше 5000 рублей и имеют мастера со специализацией "графика".
-    @Query(nativeQuery = true, value = """
-            SELECT tattoo.id, tattoo.name, tattoo.description, tattoo.price
-                FROM tattoo
-                INNER JOIN master_tattoo ON tattoo.id = master_tattoo.tattoo_id
-                INNER JOIN master ON master.id = master_tattoo.master_id
-                WHERE tattoo.price < 5000 AND master.specialization = :spec;
-            """)
-    List<Tattoo> getCustomTattoosByQuery (@Param("spec") String spec);
+    //    Получить все татуировки, которые стоят меньше 5000 рублей и имеют мастера со специализацией "графика".
+    @Query(value = "SELECT t "+
+                " FROM Tattoo t " +
+                " INNER JOIN MastersTattoos mt ON t.id = mt.tattoo.id "+
+                " INNER JOIN Master m ON m.id = mt.master.id "+
+                " WHERE t.price < 5000 AND m.specialization = :spec")
+    List<Tattoo> getCustomTattoosByQuery(@Param("spec") String spec);
 
 }

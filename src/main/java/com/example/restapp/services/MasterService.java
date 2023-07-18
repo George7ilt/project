@@ -6,6 +6,7 @@ import com.example.restapp.DTO.utils.Converter;
 import com.example.restapp.models.Master;
 import com.example.restapp.models.Studio;
 import com.example.restapp.models.Tattoo;
+import com.example.restapp.models.relations.MastersTattoos;
 import com.example.restapp.repo.MasterRepo;
 import com.example.restapp.util.exceptions.MasterNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -39,7 +40,7 @@ public class MasterService {
 
     public List<TattooDTO> findMastersWorks(long masterId) {
         Master master = findById(masterId);
-        List<Tattoo> tattoos = master.getAvailableTattoos();
+        List<Tattoo> tattoos = master.getAvailableTattoos().stream().map(MastersTattoos::getTattoo).toList();
         return tattoos.stream().map(converter::convertToTattooDTO).toList();
     }
 
@@ -66,7 +67,8 @@ public class MasterService {
 
     public void addTattooToMasterById(long masterId, long tattooId) {
         Master master = findById(masterId);
-        master.getAvailableTattoos().add(tattooService.findById(tattooId));
+        Tattoo tattoo = tattooService.findById(tattooId);
+        master.getAvailableTattoos().add(new MastersTattoos(master, tattoo));
         masterRepo.save(master);
     }
 

@@ -1,10 +1,10 @@
 package com.example.restapp.models;
 
+import com.example.restapp.models.relations.ClietnsStrudios;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.CascadeType;
 
 import java.util.List;
 
@@ -29,14 +29,11 @@ public class Studio {
     private String contactNumber;
 
     @OneToMany(mappedBy = "studio")
-    @Cascade(CascadeType.PERSIST)
+    @Cascade(value = {org.hibernate.annotations.CascadeType.PERSIST, org.hibernate.annotations.CascadeType.MERGE})
     private List<Master> masters;
 
-    @ManyToMany
-    @JoinTable(name = "studio_client",
-            joinColumns = @JoinColumn(name = "studio_id"),
-            inverseJoinColumns = @JoinColumn(name = "client_id"))
-    @Cascade(value = {CascadeType.PERSIST, CascadeType.MERGE})
-    private List<Client> clients;
+    @OneToMany(mappedBy = "studio")
+    @Cascade(value = {org.hibernate.annotations.CascadeType.PERSIST, org.hibernate.annotations.CascadeType.MERGE})
+    private List<ClietnsStrudios> clients;
 
 }

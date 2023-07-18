@@ -36,7 +36,7 @@ public class MasterController {
 
 
     //посмотреть всех мастеров по опыту (больше чем int)
-    @GetMapping("/{exp}")
+    @GetMapping("/exp_more_than/{exp}")
     public ResponseEntity<?> getMastersWithExperienceMoreThan(@PathVariable int exp) {
         return ResponseEntity.ok(masterService.findMastersWithExperienceMoreThan(exp));
     }
@@ -94,7 +94,6 @@ public class MasterController {
     //  Получить среднюю стоимость татуировок для каждой специализации мастеров.
     @GetMapping("/averagePriceOnSpecializations")
     public ResponseEntity<?> getAveragePriceOfTattoosOnSpecializations() {
-        tattooService.getAveragePriceOnSpecialization();
         return ResponseEntity.ok(tattooService.getAveragePriceOnSpecialization());
     }
 }

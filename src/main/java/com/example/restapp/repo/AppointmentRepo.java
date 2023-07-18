@@ -1,6 +1,6 @@
 package com.example.restapp.repo;
 
-import com.example.restapp.models.Appointment;
+import com.example.restapp.models.relations.Appointment;
 import com.example.restapp.models.Client;
 import org.springframework.data.jpa.repository.JpaRepository;
 

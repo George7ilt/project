@@ -2,6 +2,7 @@ package com.example.restapp.DTO.utils;
 
 import com.example.restapp.DTO.*;
 import com.example.restapp.models.*;
+import com.example.restapp.models.relations.Appointment;
 import com.example.restapp.services.ClientService;
 import com.example.restapp.services.MasterService;
 import com.example.restapp.services.StudioService;

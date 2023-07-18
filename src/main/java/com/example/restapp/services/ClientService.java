@@ -6,6 +6,7 @@ import com.example.restapp.DTO.utils.Converter;
 import com.example.restapp.models.Client;
 import com.example.restapp.repo.ClientRepo;
 import com.example.restapp.util.exceptions.ClientNotFoundException;
+import jakarta.persistence.Id;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -40,7 +41,7 @@ public class ClientService {
     }
 
     public List<TattooDTO> getClientTattoos(long id) {
-        return findById(id).getTattoos().stream().map(converter::convertToTattooDTO).toList();
+        return findById(id).getTattoos().stream().map(clientTattoo -> converter.convertToTattooDTO(clientTattoo.getTattoo())).toList();
     }
 
     public List<ClientDTO> findClientsWithMoreThanOneAppointment() {

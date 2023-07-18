@@ -1,5 +1,7 @@
 package com.example.restapp.models;
 
+import com.example.restapp.models.relations.ClientsTattoos;
+import com.example.restapp.models.relations.MastersTattoos;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -29,12 +31,12 @@ public class Tattoo {
     @Column
     private double price;
 
-    @ManyToMany
-    @JoinTable(name = "master_tattoo", joinColumns = @JoinColumn(name = "master_id"), inverseJoinColumns = @JoinColumn(name = "tattoo_id"))
-    @Cascade(value = {org.hibernate.annotations.CascadeType.PERSIST, org.hibernate.annotations.CascadeType.MERGE})
-    private List<Master> masters;
+    @OneToMany(mappedBy = "tattoo")
+    private List<MastersTattoos> masters;
 
-    @ManyToMany(mappedBy = "tattoos")
+    @OneToMany(mappedBy = "tattoo")
     @Cascade(value = {org.hibernate.annotations.CascadeType.PERSIST, org.hibernate.annotations.CascadeType.MERGE})
-    private List<Client> clients;
+    private List<ClientsTattoos> clients;
+
+
 }

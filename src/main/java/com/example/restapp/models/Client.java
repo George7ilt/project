@@ -1,11 +1,13 @@
 package com.example.restapp.models;
 
+import com.example.restapp.models.relations.Appointment;
+import com.example.restapp.models.relations.ClientsTattoos;
+import com.example.restapp.models.relations.ClietnsStrudios;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.Cascade;
 
 import java.util.List;
 import java.util.Objects;
@@ -28,18 +30,14 @@ public class Client {
     @Column(name = "contact_number")
     private String contactNumber;
 
-    @ManyToMany
-    @JoinTable(name = "client_tatto",
-            joinColumns = @JoinColumn(name = "client_id"),
-            inverseJoinColumns = @JoinColumn(name = "tattoo_id"))
-    @Cascade(value = {org.hibernate.annotations.CascadeType.MERGE,
-            org.hibernate.annotations.CascadeType.PERSIST})
-    private List<Tattoo> tattoos;
+    @OneToMany(mappedBy = "client", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    private List<ClientsTattoos> tattoos;
 
-    @ManyToMany(mappedBy = "clients")
-    @Cascade(value = {org.hibernate.annotations.CascadeType.PERSIST, org.hibernate.annotations.CascadeType.MERGE})
+    @OneToMany(mappedBy = "client", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    private List<ClietnsStrudios> studios;
 
-    private List<Studio> studios;
+    @OneToMany(mappedBy = "client")
+    private List<Appointment> appointments;
 
     @Override
     public boolean equals(Object o) {

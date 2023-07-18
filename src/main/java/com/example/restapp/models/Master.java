@@ -1,5 +1,7 @@
 package com.example.restapp.models;
 
+import com.example.restapp.models.relations.Appointment;
+import com.example.restapp.models.relations.MastersTattoos;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -32,8 +34,12 @@ public class Master {
     @Column(name = "experience_years")
     private int experienceYears;
 
-    @ManyToMany(mappedBy = "masters")
+    @OneToMany(mappedBy = "master")
     @Cascade(value = {CascadeType.PERSIST, CascadeType.MERGE})
-    private List<Tattoo> availableTattoos;
+    private List<MastersTattoos> availableTattoos;
+
+    @OneToMany(mappedBy = "master")
+    @Cascade(value = {CascadeType.PERSIST, CascadeType.MERGE})
+    private List<Appointment> appointments;
 
 }

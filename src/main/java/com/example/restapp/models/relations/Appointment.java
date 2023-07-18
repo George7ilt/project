@@ -1,5 +1,8 @@
-package com.example.restapp.models;
+package com.example.restapp.models.relations;
 
+import com.example.restapp.models.Client;
+import com.example.restapp.models.Master;
+import com.example.restapp.models.Status;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -21,12 +24,12 @@ public class Appointment {
     @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime dateTime;
 
-    @OneToOne
-    @JoinColumn(name = "client_id")
+    @ManyToOne
+    @JoinColumn(name = "client_id", referencedColumnName = "id")
     private Client client;
 
-    @OneToOne
-    @JoinColumn(name = "master_id")
+    @ManyToOne
+    @JoinColumn(name = "master_id", referencedColumnName = "id")
     private Master master;
 
     @Enumerated(value = EnumType.STRING)

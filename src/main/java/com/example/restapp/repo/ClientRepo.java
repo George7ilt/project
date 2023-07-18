@@ -10,13 +10,13 @@ import java.util.Optional;
 public interface ClientRepo extends JpaRepository<Client, Long> {
     Optional<Client> findByName(String name);
 
-    @Query(nativeQuery = true, value = """
-            SELECT client.id, client.name, COUNT(appointment.id) AS active_appointments
-            FROM client
-            INNER JOIN appointment ON client.id = appointment.client_id
-            WHERE appointment.status = 'ACTIVE'
-            GROUP BY client.id
-            HAVING COUNT(appointment.id) > 1
+    @Query(value = """
+            SELECT c , COUNT(a.id) AS active_appointments
+            FROM Client c
+            INNER JOIN Appointment a ON c.id = a.client.id
+            WHERE a.status = 'ACTIVE'
+            GROUP BY c.id
+            HAVING COUNT(a.id) > 1
             """)
     List<Client> findClientsWithMoreThanOneAppointment();
 }
