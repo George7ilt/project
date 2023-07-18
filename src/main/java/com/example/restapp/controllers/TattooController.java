@@ -40,9 +40,9 @@ public class TattooController {
 
 
     //    Получить все татуировки, которые стоят меньше 5000 рублей и имеют мастера со специализацией .
-    @GetMapping
-    public ResponseEntity<?> getCustomTattoosByQuery(@RequestParam(required = true) String spec) {
-        return ResponseEntity.ok(tattooService.getCustomTattoosByQuery(spec));
+    @GetMapping("/getCustomQuery")
+    public ResponseEntity<?> getCustomTattoosByQuery() {
+        return ResponseEntity.ok(tattooService.getCustomTattoosByQuery("firstSpec"));
     }
 
 }

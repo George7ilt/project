@@ -16,18 +16,23 @@ public interface TattooRepo extends JpaRepository<Tattoo, Long> {
             GROUP BY Master.specialization
             """
     )
-    List<Object[]> getAveragePriceOnSpecializations();
+    List<Object[]>  getAveragePriceOnSpecializations();
 
-    @Query("SELECT t FROM Tattoo t " +
-            "JOIN Master m " +
+    @Query(value = "SELECT t.* FROM tattoo t " +
+            "INNER JOIN master_tattoo mt ON t.id = mt.tattoo_id " +
+            "INNER JOIN master m ON mt.master_id = m.id " +
             "WHERE m.specialization = :specialization " +
-            "AND t.price <= :maxPrice AND t.price >= :minPrice")
+            "AND t.price <= :maxPrice " +
+            "AND t.price >= :minPrice", nativeQuery = true)
     List<Tattoo> findTattoosByPriceAndSpecialization(@Param("specialization") String specialization,
                                                      @Param("minPrice") double minPrice,
                                                      @Param("maxPrice") double maxPrice);
 
 
-    //    Получить все татуировки, которые стоят меньше 5000 рублей и имеют мастера со специализацией "графика".
+
+
+
+//    Получить все татуировки, которые стоят меньше 5000 рублей и имеют мастера со специализацией "графика".
     @Query(nativeQuery = true, value = """
             SELECT tattoo.id, tattoo.name, tattoo.description, tattoo.price
                 FROM tattoo
@@ -35,6 +40,6 @@ public interface TattooRepo extends JpaRepository<Tattoo, Long> {
                 INNER JOIN master ON master.id = master_tattoo.master_id
                 WHERE tattoo.price < 5000 AND master.specialization = :spec;
             """)
-    List<Tattoo> getCustomTattoosByQuery(@Param("spec") String spec);
+    List<Tattoo> getCustomTattoosByQuery (@Param("spec") String spec);
 
 }

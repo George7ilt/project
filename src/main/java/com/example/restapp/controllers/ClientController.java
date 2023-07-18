@@ -19,7 +19,7 @@ public class ClientController {
     //добавить клиента
     public ResponseEntity<?> create(@RequestBody @Valid ClientDTO clientDTO) {
         clientService.create(clientDTO);
-        return ResponseEntity.ok("clietn created");
+        return ResponseEntity.ok("client created");
     }
 
     //посмотреть клиента

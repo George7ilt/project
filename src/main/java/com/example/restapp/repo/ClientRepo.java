@@ -11,7 +11,7 @@ public interface ClientRepo extends JpaRepository<Client, Long> {
     Optional<Client> findByName(String name);
 
     @Query(nativeQuery = true, value = """
-            SELECT client.id, client.name, COUNT(Appointment.id) AS active_appointments
+            SELECT client.id, client.name, COUNT(appointment.id) AS active_appointments
             FROM client
             INNER JOIN appointment ON client.id = appointment.client_id
             WHERE appointment.status = 'ACTIVE'

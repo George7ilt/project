@@ -9,6 +9,7 @@ import lombok.Data;
 public class AppointmentDTO {
 
     private long id;
+
     @NotEmpty(message = "Your name can not be empty")
     @NotNull(message = "Your name can not be empty")
     private String clientName;
@@ -17,7 +18,6 @@ public class AppointmentDTO {
     @NotNull(message = "Your name can not be empty")
     private String masterName;
 
-    @NotEmpty
     private Status status;
 
     private StudioDTO studio;

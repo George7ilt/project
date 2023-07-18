@@ -38,7 +38,7 @@ public class Client {
 
     @ManyToMany(mappedBy = "clients")
     @Cascade(value = {org.hibernate.annotations.CascadeType.PERSIST, org.hibernate.annotations.CascadeType.MERGE})
-    
+
     private List<Studio> studios;
 
     @Override
