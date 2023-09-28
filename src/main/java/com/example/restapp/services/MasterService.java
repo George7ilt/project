@@ -16,84 +16,33 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-@RequiredArgsConstructor
-public class MasterService {
-    private final MasterRepo masterRepo;
-    private final TattooService tattooService;
-    private final StudioService studioService;
-    private final Converter converter;
+public interface MasterService {
 
-    public Master findByName(String masterName) {
-        Optional<Master> masterOptional = masterRepo.findByName(masterName);
-        return masterOptional.orElseThrow(() -> new MasterNotFoundException("Master with that name not found."));
-    }
+    Master findByName(String masterName);
 
-    public MasterDTO findMasterDTOById(long id) {
-        Master master = findById(id);
-        return converter.convertToMasterDTO(master);
-    }
+    MasterDTO findMasterDTOById(long id);
 
-    public Master findById(long id) {
-        Optional<Master> masterOpt = masterRepo.findById(id);
-        return masterOpt.orElseThrow(() -> new MasterNotFoundException("Master with that id not found."));
-    }
+    Master findById(long id);
 
-    public List<TattooDTO> findMastersWorks(long masterId) {
-        Master master = findById(masterId);
-        List<Tattoo> tattoos = master.getAvailableTattoos().stream().map(MastersTattoos::getTattoo).toList();
-        return tattoos.stream().map(converter::convertToTattooDTO).toList();
-    }
+    List<TattooDTO> findMastersWorks(long masterId);
 
-    public List<MasterDTO> findMastersBySpecialization(String specialization) {
-        List<Master> masters = masterRepo.findAllBySpecialization(specialization);
-        return masters.stream().map(converter::convertToMasterDTO).toList();
-    }
+    List<MasterDTO> findMastersBySpecialization(String specialization);
 
-    public List<MasterDTO> findMastersWithExperienceMoreThan(int exp) {
-        List<Master> masters = masterRepo.findAllByExperienceYearsGreaterThan(exp);
-        return masters.stream().map(converter::convertToMasterDTO).toList();
-    }
+    List<MasterDTO> findMastersWithExperienceMoreThan(int exp);
 
-    public void deleteById(long masterId) {
-        Master master = findById(masterId);
-        master.getStudio().getMasters().remove(master);
-        masterRepo.deleteById(masterId);
-    }
+    void deleteById(long masterId);
 
-    public void createMaster(MasterDTO masterDTO) {
-        Master master = converter.convertToMaster(masterDTO);
-        masterRepo.save(master);
-    }
+    void createMaster(MasterDTO masterDTO);
 
-    public void addTattooToMasterById(long masterId, long tattooId) {
-        Master master = findById(masterId);
-        Tattoo tattoo = tattooService.findById(tattooId);
-        master.getAvailableTattoos().add(new MastersTattoos(master, tattoo));
-        masterRepo.save(master);
-    }
+    void addTattooToMasterById(long masterId, long tattooId);
 
-    public void deleteTattooFromMasterById(long masterId, long tattooId) {
-        Master master = findById(masterId);
-        master.getAvailableTattoos().remove(tattooService.findById(tattooId));
-        masterRepo.save(master);
-    }
+    void deleteTattooFromMasterById(long masterId, long tattooId);
 
-    public void setStudioToMaster(long masterId, long studioId) {
-        studioService.addMaster(studioId, masterId);
-    }
+    void setStudioToMaster(long masterId, long studioId);
 
-    public void setNewSpec(long masterId, String spec) {
-        Master master = findById(masterId);
-        master.setSpecialization(spec);
-        masterRepo.save(master);
-    }
+    void setNewSpec(long masterId, String spec);
 
-    public List<MasterDTO> findAllMastersByStudioAndSpec(long studioId, String spec) {
-        Studio studio = studioService.findStudioById(studioId);
-        return masterRepo.findAllByStudioAndSpecialization(studio, spec).stream().map(converter::convertToMasterDTO).toList();
-    }
+    List<MasterDTO> findAllMastersByStudioAndSpec(long studioId, String spec);
 
-    public void save(Master master) {
-        masterRepo.save(master);
-    }
+    void save(Master master);
 }

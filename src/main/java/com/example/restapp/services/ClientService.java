@@ -14,38 +14,15 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-@RequiredArgsConstructor
-public class ClientService {
-    private final ClientRepo clientRepo;
-    private final Converter converter;
+public interface ClientService {
 
-    public Client findByName(String name) {
-        Optional<Client> optionalClient = clientRepo.findByName(name);
-        return optionalClient.orElseThrow(() -> new ClientNotFoundException("Client with that name not found"));
-    }
+    Client findByName(String name);
 
-    public Client findById(long clientId) {
-        Optional<Client> optionalClient = clientRepo.findById(clientId);
-        return optionalClient.orElseThrow(() -> new ClientNotFoundException("Client with that id not found"));
-    }
+    Client findById(long clientId);
 
-    public ClientDTO findClientDTOById(long clientId) {
-        Optional<Client> optionalClient = clientRepo.findById(clientId);
-        Client client = optionalClient.orElseThrow(() -> new ClientNotFoundException("Client with that id not found"));
-        return converter.convertToClientDTO(client);
+    ClientDTO findClientDTOById(long clientId);
 
-    }
-
-    public void create(ClientDTO clientDTO) {
-        clientRepo.save(converter.convertToClient(clientDTO));
-    }
-
-    public List<TattooDTO> getClientTattoos(long id) {
-        return findById(id).getTattoos().stream().map(clientTattoo -> converter.convertToTattooDTO(clientTattoo.getTattoo())).toList();
-    }
-
-    public List<ClientDTO> findClientsWithMoreThanOneAppointment() {
-        return clientRepo.findClientsWithMoreThanOneAppointment()
-                .stream().map(converter::convertToClientDTO).toList();
-    }
+   void create(ClientDTO clientDTO);
+    List<TattooDTO> getClientTattoos(long id);
+    List<ClientDTO> findClientsWithMoreThanOneAppointment();
 }

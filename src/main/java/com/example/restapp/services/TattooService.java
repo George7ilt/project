@@ -13,43 +13,22 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-@RequiredArgsConstructor
-public class TattooService {
-    private final TattooRepo tattooRepo;
-    private final Converter converter;
+public interface TattooService {
 
-    public List<?> getAveragePriceOnSpecialization() {
-        return tattooRepo.getAveragePriceOnSpecializations();
-    }
+    List<?> getAveragePriceOnSpecialization();
 
-    public Tattoo findById(long tattooId) {
-        Optional<Tattoo> tattooOptional = tattooRepo.findById(tattooId);
-        return tattooOptional.orElseThrow(() -> new TattooNotFoundException("Tattoo not found"));
-    }
+    Tattoo findById(long tattooId);
 
-    public TattooDTO findTattooDTOById(long tattooID) {
-        Optional<Tattoo> tattooOptional = tattooRepo.findById(tattooID);
-        Tattoo tattoo = tattooOptional.orElseThrow(() -> new TattooNotFoundException("Tattoo not found"));
-        return converter.convertToTattooDTO(tattoo);
-    }
+    TattooDTO findTattooDTOById(long tattooID);
 
-    public List<TattooDTO> findTattoosByPriceAndSpecialization(String specialization,
+    List<TattooDTO> findTattoosByPriceAndSpecialization(String specialization,
                                                                double minPrice,
-                                                               double maxPrice) {
-        List<Tattoo> tattoos = tattooRepo.findTattoosByPriceAndSpecialization(specialization, minPrice, maxPrice);
-        return tattoos.stream().map(converter::convertToTattooDTO).toList();
-    }
+                                                               double maxPrice);
 
 
-    public void createTattoo(TattooDTO tattooDTO) {
-        tattooRepo.save(converter.convertToTattoo(tattooDTO));
-    }
+    void createTattoo(TattooDTO tattooDTO);
 
-    public void deleteTattoo(long id) {
-        tattooRepo.deleteById(id);
-    }
+    void deleteTattoo(long id);
 
-    public List<TattooDTO> getCustomTattoosByQuery(String spec) {
-        return tattooRepo.getCustomTattoosByQuery(spec).stream().map(converter::convertToTattooDTO).toList();
-    }
+    List<TattooDTO> getCustomTattoosByQuery(String spec);
 }

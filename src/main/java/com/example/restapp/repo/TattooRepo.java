@@ -4,9 +4,10 @@ import com.example.restapp.models.Tattoo;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
-
+@Repository
 public interface TattooRepo extends JpaRepository<Tattoo, Long> {
     @Query(value = """
             SELECT m.specialization, AVG(t.price) AS average_price

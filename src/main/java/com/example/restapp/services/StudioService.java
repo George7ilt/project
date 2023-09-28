@@ -14,70 +14,25 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class StudioService {
-    private final StudioRepo studioRepo;
-    private final MasterService masterService;
-    private final Converter converter;
+public interface StudioService {
 
-    public StudioService(StudioRepo studioRepo, @Lazy MasterService masterService, Converter converter) {
-        this.studioRepo = studioRepo;
-        this.masterService = masterService;
-        this.converter = converter;
-    }
+    Studio findStudioById(long studioId);
 
-    public Studio findStudioById(long studioId) {
-        Optional<Studio> optionalStudio = studioRepo.findById(studioId);
-        return optionalStudio.orElseThrow(() -> new StudioNotFoundException("Studio with that id not found"));
-    }
+    StudioDTO findStudioDTOById(long studioId);
 
-    public StudioDTO findStudioDTOById(long studioId) {
-        Optional<Studio> optionalStudio = studioRepo.findById(studioId);
-        Studio studio = optionalStudio.orElseThrow(() -> new StudioNotFoundException("Studio with that id not found"));
-        return converter.convertToStudioDTO(studio);
-    }
+    void create(StudioDTO studioDTO);
 
-    public void create(StudioDTO studioDTO) {
-        Studio studio = converter.convertToStudio(studioDTO);
-        studioRepo.save(studio);
-    }
+    void deleteStudio(long id);
 
-    public void deleteStudio(long id) {
-        studioRepo.deleteById(id);
-    }
+    List<MasterDTO> findAllMasters(long id);
 
-    public List<MasterDTO> findAllMasters(long id) {
-        return findStudioById(id).getMasters().stream().map(converter::convertToMasterDTO).toList();
-    }
+    void setNewAdress(long id, String newAdress);
 
-    public void setNewAdress(long id, String newAdress) {
-        Studio studio = findStudioById(id);
-        studio.setAddress(newAdress);
-        studioRepo.save(studio);
-    }
+    void setNewName(long id, String newName);
 
-    public void setNewName(long id, String newName) {
-        Studio studio = findStudioById(id);
-        studio.setAddress(newName);
-        studioRepo.save(studio);
-    }
+    void addMaster(long id, long masterId);
 
-    public void addMaster(long id, long masterId) {
-        Master master = masterService.findById(masterId);
-        master.getStudio().getMasters().remove(master);
-        Studio studio = findStudioById(id);
-        studio.getMasters().add(master);
-        studioRepo.save(studio);
-    }
+    void setNewNumber(long id, String newNumber);
 
-    public void setNewNumber(long id, String newNumber) {
-        Studio studio = findStudioById(id);
-        studio.setContactNumber(newNumber);
-    }
-
-    public void fireMaster(long studioId, long masterId) {
-        Studio studio = findStudioById(studioId);
-        Master master = masterService.findById(masterId);
-        studio.getMasters().remove(master);
-
-    }
+    void fireMaster(long studioId, long masterId);
 }
